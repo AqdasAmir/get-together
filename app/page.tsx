@@ -3,9 +3,10 @@ import {
   CalendarDays,
   Share2,
   Users2,
+  UsersRound,
   ArrowRight,
-  Sparkles,
   CheckCircle2,
+  PlusCircle,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -17,65 +18,87 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getSession } from "@/lib/auth/server";
 
-export default function Home() {
+export default async function Home() {
+  const session = await getSession();
+  const isAuthenticated = Boolean(session?.data?.user);
+
   return (
-    <main className="relative flex flex-1 flex-col items-center justify-center px-4 py-12 md:py-20">
-      {/* Decorative ambient background glow */}
-      <div className="pointer-events-none absolute -top-24 left-1/2 -z-10 h-[380px] w-[600px] -translate-x-1/2 rounded-full bg-violet-600/15 blur-[120px]" />
+    <div className="relative flex flex-1 flex-col items-center justify-center py-10 md:py-16">
+      {/* Background radial accent */}
+      <div className="pointer-events-none absolute -top-10 left-1/2 -z-10 h-[320px] w-[540px] -translate-x-1/2 rounded-full bg-zinc-800/40 blur-[130px]" />
 
-      {/* Hero Section */}
-      <section className="flex max-w-4xl flex-col items-center space-y-6 text-center">
+      {/* Hero Header */}
+      <section className="flex max-w-3xl flex-col items-center space-y-6 text-center">
         <Badge
           variant="outline"
           className="border-violet-500/30 bg-violet-500/10 px-3.5 py-1 text-sm font-medium text-violet-300 backdrop-blur-md transition-colors hover:bg-violet-500/15"
         >
-          <Sparkles className="mr-1.5 h-3.5 w-3.5 text-violet-400" />
+          <UsersRound className="mr-1.5 h-3.5 w-3.5 text-violet-400" />
           Plan • Share • Gather
         </Badge>
 
-        <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl md:text-7xl">
+        <h1 className="text-4xl font-extrabold tracking-tight text-zinc-100 sm:text-6xl md:text-7xl">
           Plan events & track <br />
-          <span className="bg-gradient-to-r from-violet-400 via-purple-300 to-indigo-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-zinc-200 via-zinc-400 to-zinc-500 bg-clip-text text-transparent">
             responses in real-time
           </span>
         </h1>
 
         <p className="max-w-2xl text-base text-zinc-400 sm:text-lg">
-          Create events in seconds, distribute unique invite links, and watch
-          live RSVPs update with instantaneous Going, Maybe, and Not Going counts.
+          Create events in seconds, send unique invite links, and get
+          live attendance update with instants Going, Maybe, and Not Going counts.
         </p>
 
-        {/* Action Buttons */}
-        <div className="flex flex-wrap items-center justify-center gap-3.5 pt-2">
-          <Button
-            size="lg"
-            className="h-11 bg-zinc-1000/60 px-6 font-semibold text-white shadow-[0_0_20px_-3px_rgba(147,51,234,0.5)] transition-all hover:bg-zinc-500 hover:shadow-[0_0_25px_-2px_rgba(147,51,234,0.7)]"
-            asChild
-          >
-            <Link href="/auth/sign-up" className="flex items-center gap-2">
-              Create free account
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Button>
-
-          <Button
-            size="lg"
-            variant="outline"
-            className="h-11 border-zinc-800 bg-zinc-900/60 px-5 text-zinc-300 backdrop-blur-md transition-colors hover:border-zinc-700 hover:bg-zinc-800/80 hover:text-white"
-            asChild
-          >
-            <Link href="/auth/sign-in">Sign in</Link>
-          </Button>
-
-          <Button
-            size="lg"
-            variant="ghost"
-            className="h-11 text-zinc-400 transition-colors hover:bg-zinc-800/50 hover:text-zinc-200"
-            asChild
-          >
-            <Link href="/dashboard">Open dashboard</Link>
-          </Button>
+        
+        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+          {isAuthenticated ? (
+            <>
+              <Button
+                size="lg"
+                className="h-11 border border-zinc-700 bg-zinc-800 px-6 font-medium text-zinc-100 shadow-sm transition-colors hover:bg-zinc-700 hover:text-white"
+                asChild
+              >
+                <Link href="/dashboard" className="flex items-center gap-2">
+                  Go to Dashboard
+                  <ArrowRight className="h-4 w-4 text-zinc-400" />
+                </Link>
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="h-11 border-zinc-800 bg-zinc-900/80 px-5 text-zinc-300 hover:border-zinc-700 hover:bg-zinc-800 hover:text-white"
+                asChild
+              >
+                <Link href="/events/new" className="flex items-center gap-2">
+                  <PlusCircle className="h-4 w-4" />
+                  Create Event
+                </Link>
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                size="lg"
+                className="h-11 border border-zinc-700 bg-zinc-800 px-6 font-medium text-zinc-100 shadow-sm transition-colors hover:bg-zinc-700 hover:text-white"
+                asChild
+              >
+                <Link href="/auth/sign-up" className="flex items-center gap-2">
+                  Create account
+                  <ArrowRight className="h-4 w-4 text-zinc-400" />
+                </Link>
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                className="h-11 border-zinc-800 bg-zinc-900/80 px-5 text-zinc-300 hover:border-zinc-700 hover:bg-zinc-800 hover:text-white"
+                asChild
+              >
+                <Link href="/auth/sign-in">Sign in</Link>
+              </Button>
+            </>
+          )}
         </div>
       </section>
 
@@ -108,7 +131,7 @@ export default function Home() {
               Share invite links
             </CardTitle>
             <CardDescription className="text-zinc-400">
-              Generate unique tokens for frictionless guest RSVPs without friction.
+              Generate unique link for guest's Responses. They don't have to Create Account or Login.
             </CardDescription>
           </CardHeader>
         </Card>
@@ -135,6 +158,6 @@ export default function Home() {
           </CardContent>
         </Card>
       </section>
-    </main>
+    </div>
   );
 }
