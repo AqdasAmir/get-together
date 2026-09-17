@@ -5,7 +5,6 @@ import {
   Clock,
   PlusCircle,
   ArrowUpRight,
-  Sparkles,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { prisma } from "@/lib/prisma";
@@ -97,77 +96,71 @@ export async function DashboardContent({ userId }: { userId: string }) {
       ) : (
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {events.map((event) => (
-            <Card
+            <Link
               key={event.id}
-              className="group relative flex flex-col justify-between overflow-hidden border-zinc-800/80 bg-zinc-900/40 backdrop-blur-xl transition-all duration-200 hover:-translate-y-1 hover:border-zinc-700 hover:bg-zinc-900/70"
+              href={`/events/${event.id}`}
+              className="group block rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
             >
-              {/* Corner ambient glow accent */}
-              <div className="absolute top-0 right-0 h-28 w-28 rounded-bl-full bg-purple-500/5 transition-opacity group-hover:bg-purple-500/10" />
+              <Card className="relative flex h-full flex-col justify-between overflow-hidden border-zinc-800/80 bg-zinc-900/40 backdrop-blur-xl transition-all duration-200 group-hover:-translate-y-1 group-hover:border-zinc-700 group-hover:bg-zinc-900/70">
+                
+                <div className="absolute top-0 right-0 h-28 w-28 rounded-bl-full bg-purple-500/5 transition-opacity group-hover:bg-purple-500/10" />
 
-              <CardHeader className="space-y-4 pb-4">
-                {/* Header row: Icon & Open Link */}
-                <div className="flex items-center justify-between">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-purple-500/20 bg-purple-500/10 text-purple-400 group-hover:border-purple-500/40 group-hover:text-purple-300">
-                    <CalendarDays className="h-5 w-5" />
-                  </div>
-
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="h-8 gap-1 px-2.5 text-xs text-zinc-400 hover:bg-zinc-800/70 hover:text-zinc-100 z-50"
-                    asChild
-                  >
-                    <Link href={`/events/${event.id}`}>
-                      View
-                      <ArrowUpRight className="h-3.5 w-3.5" />
-                    </Link>
-                  </Button>
-                </div>
-
-                {/* Event Title */}
-                <div>
-                  <CardTitle className="line-clamp-1 text-lg font-semibold text-zinc-100 group-hover:text-white">
-                    {event.title}
-                  </CardTitle>
-
-                  {/* Metadata (Date & Location) */}
-                  <div className="mt-2 space-y-1.5 text-xs text-zinc-400">
-                    <div className="flex items-center gap-1.5">
-                      <Clock className="h-3.5 w-3.5 text-zinc-500" />
-                      <span>
-                        {event.eventDate
-                          ? new Date(event.eventDate).toLocaleString(undefined, {
-                              dateStyle: "medium",
-                              timeStyle: "short",
-                            })
-                          : "No date set"}
-                      </span>
+                <CardHeader className="space-y-4 pb-4">
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-purple-500/20 bg-purple-500/10 text-purple-400 group-hover:border-purple-500/40 group-hover:text-purple-300">
+                      <CalendarDays className="h-5 w-5" />
                     </div>
 
-                    {event.location && (
-                      <div className="flex items-center gap-1.5">
-                        <MapPin className="h-3.5 w-3.5 text-zinc-500" />
-                        <span className="line-clamp-1">{event.location}</span>
-                      </div>
-                    )}
+                    <div className="inline-flex h-8 items-center gap-1 rounded-md px-2.5 text-xs text-zinc-400 transition-colors group-hover:bg-zinc-800/70 group-hover:text-zinc-100">
+                      View
+                      <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </div>
                   </div>
-                </div>
-              </CardHeader>
 
-              <CardContent className="pt-0">
-                <div className="flex flex-wrap items-center gap-2 border-t border-zinc-800/80 pt-3.5 text-xs">
-                  <span className="inline-flex items-center gap-1 rounded-md border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 font-medium text-emerald-400">
-                    Going: {event.goingCount}
-                  </span>
-                  <span className="inline-flex items-center gap-1 rounded-md border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 font-medium text-amber-400">
-                    Maybe: {event.maybeCount}
-                  </span>
-                  <span className="inline-flex items-center gap-1 rounded-md border border-zinc-700 bg-zinc-800 px-2 py-0.5 font-medium text-zinc-400">
-                    Not going: {event.notGoingCount}
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
+                  <div>
+                    <CardTitle className="line-clamp-1 text-lg font-semibold text-zinc-100 transition-colors group-hover:text-white">
+                      {event.title}
+                    </CardTitle>
+  
+                    <div className="mt-2 space-y-1.5 text-xs text-zinc-400">
+                      <div className="flex items-center gap-1.5">
+                        <Clock className="h-3.5 w-3.5 text-zinc-500" />
+                        <span>
+                          {event.eventDate
+                            ? new Date(event.eventDate).toLocaleString(undefined, {
+                                dateStyle: "medium",
+                                timeStyle: "short",
+                              })
+                            : "No date set"}
+                        </span>
+                      </div>
+
+                      {event.location && (
+                        <div className="flex items-center gap-1.5">
+                          <MapPin className="h-3.5 w-3.5 text-zinc-500" />
+                          <span className="line-clamp-1">{event.location}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </CardHeader>
+
+                <CardContent className="pt-0">
+                  <div className="flex flex-wrap items-center gap-2 border-t border-zinc-800/80 pt-3.5 text-xs">
+                    <span className="inline-flex items-center gap-1 rounded-md border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 font-medium text-emerald-400">
+                      Going: {event.goingCount}
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded-md border border-amber-500/20 bg-amber-500/10 px-2 py-0.5 font-medium text-amber-400">
+                      Maybe: {event.maybeCount}
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded-md border border-zinc-700 bg-zinc-800 px-2 py-0.5 font-medium text-zinc-400">
+                      Not going: {event.notGoingCount}
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
       )}

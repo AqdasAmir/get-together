@@ -4,6 +4,7 @@ import { Form, FormField, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { SubmitButton } from "@/components/submit-button";
 import { createEventAction } from "@/lib/actions/events";
 import Link from "next/link";
 import {
@@ -135,12 +136,7 @@ export default async function NewEventPage() {
                 <Link href="/dashboard">Cancel</Link>
               </Button>
 
-              <Button
-                type="submit"
-                className="border border-zinc-700 bg-zinc-800 px-5 font-medium text-zinc-100 shadow-sm transition-colors hover:bg-zinc-700 hover:text-white"
-              >
-                Create Event
-              </Button>
+              <SubmitButton />
             </div>
           </Form>
         </CardContent>

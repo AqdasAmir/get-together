@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { getSession } from "../auth/server";
 import { prisma } from "../prisma";
 import { AttendanceStatus } from "@/app/generated/prisma/enums";
+import { revalidatePath } from "next/cache";
 
 function parseCreateEvent(formData: FormData) {
   const title = String(formData.get("title") ?? "").trim();
@@ -50,8 +51,9 @@ export async function createEventAction(formData: FormData) {
   const userId = session.data!.user.id;
   const input = parseCreateEvent(formData);
 
+  let created;
   try {
-    const created = await prisma.event.create({
+    created = await prisma.event.create({
       data: {
         ownerUserId: userId,
         title: input.title,
@@ -60,10 +62,12 @@ export async function createEventAction(formData: FormData) {
         eventDate: input.eventDate ? new Date(input.eventDate) : null,
       },
     });
-    redirect(`/events/${created.id}`);
+    revalidatePath("/dashboard");
   } catch (err) {
     console.error(err);
+    throw new Error("Failed to create event");
   }
+  redirect(`/events/${created.id}`);
 }
 
 export async function createInviteLinkAction(eventId: string) {

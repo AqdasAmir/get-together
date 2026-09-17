@@ -26,6 +26,7 @@ import {
   HelpCircle,
   XCircle,
 } from "lucide-react";
+import { CopyButton } from "./copy-button";
 
 export async function EventDetailContent({
   userId,
@@ -176,16 +177,19 @@ export async function EventDetailContent({
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-xs leading-relaxed text-zinc-400">
-              Share this link with attendees so they can Respond immediately without
-              having to register or log in.
+              Share this link with attendees so they can Respond immediately
+              without having to register or log in.
             </p>
 
             {inviteUrl ? (
-              <div className="flex items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950/70 p-2.5 font-mono text-xs text-zinc-300">
-                <Link2 className="h-4 w-4 shrink-0 text-zinc-500" />
-                <span className="truncate selection:bg-purple-500/30 selection:text-purple-200">
-                  {inviteUrl}
-                </span>
+              <div className="flex items-center justify-between gap-2 rounded-lg border border-zinc-800 bg-zinc-950/70 p-2 font-mono text-xs text-zinc-300">
+                <div className="flex min-w-0 items-center gap-2">
+                  <Link2 className="h-4 w-4 shrink-0 text-zinc-500" />
+                  <span className="truncate selection:bg-purple-500/30 selection:text-purple-200">
+                    {inviteUrl}
+                  </span>
+                </div>
+                <CopyButton text={inviteUrl} />
               </div>
             ) : (
               <div className="rounded-lg border border-dashed border-zinc-800 bg-zinc-950/30 p-4 text-center text-xs text-zinc-500">
@@ -216,7 +220,8 @@ export async function EventDetailContent({
               </CardTitle>
             </div>
             <span className="text-xs text-zinc-500">
-              {attendances.length} Total {attendances.length === 1 ? "Response" : "Responses"}
+              {attendances.length} Total{" "}
+              {attendances.length === 1 ? "Response" : "Responses"}
             </span>
           </CardHeader>
           <CardContent className="pt-2">
@@ -235,9 +240,15 @@ export async function EventDetailContent({
                 <Table>
                   <TableHeader>
                     <TableRow className="border-zinc-800/80 hover:bg-transparent">
-                      <TableHead className="text-xs text-zinc-400">Name</TableHead>
-                      <TableHead className="text-xs text-zinc-400">Email</TableHead>
-                      <TableHead className="text-xs text-zinc-400">Status</TableHead>
+                      <TableHead className="text-xs text-zinc-400">
+                        Name
+                      </TableHead>
+                      <TableHead className="text-xs text-zinc-400">
+                        Email
+                      </TableHead>
+                      <TableHead className="text-xs text-zinc-400">
+                        Status
+                      </TableHead>
                       <TableHead className="text-right text-xs text-zinc-400">
                         Responded
                       </TableHead>
@@ -265,26 +276,25 @@ export async function EventDetailContent({
                                 isGoing
                                   ? "border border-emerald-500/20 bg-emerald-500/10 text-emerald-400"
                                   : isMaybe
-                                  ? "border border-amber-500/20 bg-amber-500/10 text-amber-400"
-                                  : "border border-zinc-700 bg-zinc-800 text-zinc-400"
+                                    ? "border border-amber-500/20 bg-amber-500/10 text-amber-400"
+                                    : "border border-zinc-700 bg-zinc-800 text-zinc-400"
                               }`}
                             >
                               {attendance.status === "not_going"
                                 ? "Not Going"
                                 : attendance.status === "going"
-                                ? "Going"
-                                : "Maybe"}
+                                  ? "Going"
+                                  : "Maybe"}
                             </span>
                           </TableCell>
                           <TableCell className="text-right text-xs text-zinc-500">
-                            {new Date(attendance.respondedAt).toLocaleDateString(
-                              undefined,
-                              {
-                                month: "short",
-                                day: "numeric",
-                                year: "numeric",
-                              }
-                            )}
+                            {new Date(
+                              attendance.respondedAt,
+                            ).toLocaleDateString(undefined, {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            })}
                           </TableCell>
                         </TableRow>
                       );
